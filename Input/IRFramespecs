@@ -1,0 +1,11 @@
+xinput --list-props 11
+Device 'Multi touch   Multi touch overlay device':
+	Device Enabled (114):	1
+	Coordinate Transformation Matrix (115):	1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000
+	libinput Calibration Matrix (427):	1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000
+	libinput Calibration Matrix Default (428):	1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000
+	libinput Send Events Modes Available (234):	1, 0
+	libinput Send Events Mode Enabled (235):	0, 0
+	libinput Send Events Mode Enabled Default (236):	0, 0
+	Device Node (237):	"/dev/input/event4"
+	Device Product ID (238):	43756, 49185

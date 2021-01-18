@@ -1,0 +1,14 @@
+[Unit]
+Description=Fluidsynth server
+After=network.target
+
+[Service]
+ExecStart=/bin/bash fluidsynthLaunch.sh
+WorkingDirectory=/home/pi/Documents/Fireplace
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
