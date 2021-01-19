@@ -10,12 +10,12 @@ class IRFrame(object):
     self.devicePath = devicePath
     self.range = range
     self.device = None
-    self.values = {
-      "xVal": 0,
-      "yVal": 0,
-      "xPercent":0.0,
-      "yPercent":0.0
-    }
+    
+    self.xVal = 0
+    self.yVal = 0
+    self.xPercent = 0.0
+    self.yPercent = 0.0
+
   
   def loadDevice(self,devicePath, attempts):
     for x in range(0, attempts):
@@ -31,12 +31,12 @@ class IRFrame(object):
     self.device = self.loadDevice(self.devicePath, 4)
     return self.device
 
-  def setXVal(self,val):
-    self.values["xVal"] = val
-    self.values["xPercent"] = calculatePercentage(self.values["xVal"], self.range["xMin"], self.range["xMax"])
+  def setXVal(self, val):
+    self.xVal = val
+    self.xPercent = calculatePercentage(self.xVal, self.range["xMin"], self.range["xMax"])
   
   def setYVal(self,val):
-    self.values["yVal"] = val
-    self.values["yPercent"] = calculatePercentage(self.values["yVal"], self.range["yMin"], self.range["yMax"])
+    self.yVal = val
+    self.yPercent = calculatePercentage(self.yVal, self.range["yMin"], self.range["yMax"])
 
 
