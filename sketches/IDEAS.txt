@@ -1,0 +1,9 @@
+IDEAS
+
+- Fireplace effect with glowing lights that respond to time of day
+- Sequencer. x axis is time, y axis is note. 
+    Can move hand to turn on and off tiles
+- Cellular Automata that generates music and visuals (generative)
+    Steps when moving hand inside
+- DJ Marti Mode
+- Meditation Mode
