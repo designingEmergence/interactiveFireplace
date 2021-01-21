@@ -24,3 +24,22 @@ class RepeatedTimer(object):
     def stop(self):
         self._timer.cancel()
         self.is_running = False
+
+class NoEventTimer(object):
+    def __init__(self, offTime):
+        self.offTime = offTime
+        self.enabled = False
+        self._timer = None
+    
+    def start(self, offFunction):
+        if not self.enabled:
+            #print('start off timer')
+            self._timer= Timer(self.offTime, offFunction)
+            self._timer.start()
+            self.enabled = True
+
+    def cancel(self):
+        if self.enabled:
+            #print('cancel off timer')
+            self._timer.cancel()
+            self.enabled = False

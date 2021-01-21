@@ -1,6 +1,6 @@
 from socket import *
 from time import sleep
-from .RepeatedTimer import RepeatedTimer
+from .timers import RepeatedTimer
 
 class AudioSocket(object):
 
