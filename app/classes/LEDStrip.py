@@ -17,9 +17,14 @@ class LEDStrip(object):
     self.defaultColor = defaultColor
     self.strip = Adafruit_NeoPixel(self.ledCount, self.ledPin, self.ledFreq, self.ledDMA, self.ledSignalInvert, self.maxBrightness, self.ledChannel)
     self.strip.begin()
+    self.animate = False
 
   def show(self):
     self.strip.show()
+  
+  def stopAnimation(self):
+    print('stop animation')
+    self.animate = False
 
   def calculatePixel(self, percentVal, minimum, maximum):
     scale = maximum-minimum
@@ -41,6 +46,17 @@ class LEDStrip(object):
         self.strip.setPixelColor(i, color)
         self.strip.show()
         sleep(wait_ms/1000.0)
+  
+  def theaterChase(self, color, wait_ms=50, iterations=10):
+    print('theater chase')
+    while self.animate:
+      for q in range(3):
+        for i in range(0, self.strip.numPixels(), 3):
+          self.strip.setPixelColor(i+q, color)
+        self.strip.show()
+        sleep(wait_ms/1000.0)
+        for i in range(0, self.strip.numPixels(), 3):
+          self.strip.setPixelColor(i+q, 0)
 
   def showAllSegments(self):
     self.setSegmentColor(0, self.bottomRight, Color(255,0,0))

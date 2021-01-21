@@ -3,8 +3,8 @@ Description=My service
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 -u edgeProximity.py
-WorkingDirectory=/home/pi/Documents/Fireplace/sketches
+ExecStart=/usr/bin/python3 -u main.py
+WorkingDirectory=/home/pi/Documents/Fireplace/app
 StandardOutput=inherit
 StandardError=inherit
 Restart=always

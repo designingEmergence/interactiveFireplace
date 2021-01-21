@@ -1,9 +1,3 @@
-# import time
-# import sys
-# from socket import *
-# from rpi_ws281x import *
-# from threading import Timer
-
 import math
 import argparse
 from rpi_ws281x import Color
@@ -34,9 +28,12 @@ audio = AudioSocket(9800)
 ledStrip = LEDStrip(ledCount, ledPin, ledBottomLeft, ledBottomRight, ledTopLeft, ledTopRight,50)
 
 def removeHand(): #define what happens if hand is removed
-    ledStrip.setStripColor(show=True)
+    #ledStrip.setStripColor(show=True) #Turn off LEDs
+    ledStrip.animate = True
+    # stopAnimation = NoEventTimer(2)
+    # stopAnimation.start(ledStrip.stopAnimation)
+    ledStrip.theaterChase(Color(90,50,20), wait_ms=100, iterations=1000)
     audio.sendReset()
-    # sendReset()
     print("hand removed")
 
 if __name__ == '__main__':
@@ -49,14 +46,15 @@ if __name__ == '__main__':
   frameEvents = frame.start()
   audio.start()
 
-  ledStrip.setStripColor(Color(90,60,20), True)
-
+  #ledStrip.setStripColor(Color(90,60,20), True)
+  removeHand()
   offTimer = NoEventTimer(12)
 
   try:
     for event in frameEvents.read_loop():
-      #print(event)
+      print(event)
       if event.code == 53:
+        ledStrip.stopAnimation()
         offTimer.cancel()
         frame.setXVal(event.value)
         note = int(math.ceil(frame.xPercent*100))
