@@ -1,5 +1,6 @@
 import math
 import argparse
+from threading import Thread
 from rpi_ws281x import Color
 from classes.IRFrame import IRFrame
 from classes.AudioSocket import AudioSocket
@@ -25,14 +26,20 @@ ledTopLeft = 228
 
 frame = IRFrame(IRFramePath, frameRange)
 audio = AudioSocket(9800)
-ledStrip = LEDStrip(ledCount, ledPin, ledBottomLeft, ledBottomRight, ledTopLeft, ledTopRight,50)
+ledStrip = LEDStrip(ledCount, ledPin, ledBottomLeft, ledBottomRight, ledTopLeft, ledTopRight,maxBrightness=20)
+
+
+def screensaver():
+  #ledStrip.theaterChase(color=Color(90,50,20), wait_ms=100)
+  ledStrip.rainbow(100)
 
 def removeHand(): #define what happens if hand is removed
     #ledStrip.setStripColor(show=True) #Turn off LEDs
     ledStrip.animate = True
     # stopAnimation = NoEventTimer(2)
     # stopAnimation.start(ledStrip.stopAnimation)
-    ledStrip.theaterChase(Color(90,50,20), wait_ms=100, iterations=1000)
+    animation = Thread(target=screensaver, args=())
+    animation.start()
     audio.sendReset()
     print("hand removed")
 
@@ -52,9 +59,11 @@ if __name__ == '__main__':
 
   try:
     for event in frameEvents.read_loop():
-      print(event)
+      #print(event)
       if event.code == 53:
-        ledStrip.stopAnimation()
+        if ledStrip.animate:
+          ledStrip.stopAnimation()
+
         offTimer.cancel()
         frame.setXVal(event.value)
         note = int(math.ceil(frame.xPercent*100))
@@ -64,7 +73,7 @@ if __name__ == '__main__':
         vol = int(math.ceil((1-frame.yPercent)*100)/2 + 20)
       
       elif event.code == 0:
-        ledStrip.setStripColor(show=True)
+        ledStrip.setStripColor(show=False)
         ledStrip.showXYPosition(frame.xPercent, frame.yPercent)
         ledStrip.show()
         audio.sendNote(2,note,vol)

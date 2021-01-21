@@ -1,6 +1,17 @@
 from rpi_ws281x import *
 from time import sleep
 
+def wheel(pos):
+  """Generate rainbow colors across 0-255 positions."""
+  if pos < 85:
+    return Color(pos * 3, 255 - pos * 3, 0)
+  elif pos < 170:
+    pos -= 85
+    return Color(255 - pos * 3, 0, pos * 3)
+  else:
+    pos -= 170
+    return Color(0, pos * 3, 255 - pos * 3)
+
 class LEDStrip(object):
   def __init__(self, ledCount, ledPin, bL, bR, tL, tR, maxBrightness=255, defaultColor=Color(255,255,255)):
     self.ledCount = ledCount
@@ -23,7 +34,7 @@ class LEDStrip(object):
     self.strip.show()
   
   def stopAnimation(self):
-    print('stop animation')
+    #print('stop animation')
     self.animate = False
 
   def calculatePixel(self, percentVal, minimum, maximum):
@@ -47,7 +58,7 @@ class LEDStrip(object):
         self.strip.show()
         sleep(wait_ms/1000.0)
   
-  def theaterChase(self, color, wait_ms=50, iterations=10):
+  def theaterChase(self, color=Color(90,50,20), wait_ms=50):
     print('theater chase')
     while self.animate:
       for q in range(3):
@@ -58,6 +69,17 @@ class LEDStrip(object):
         for i in range(0, self.strip.numPixels(), 3):
           self.strip.setPixelColor(i+q, 0)
 
+  def rainbow(self, wait_ms=30):
+    print('rainbow')
+    while self.animate:
+      for j in range(256):
+        if self.animate == False:
+          break
+        for i in range(self.strip.numPixels()):
+          self.strip.setPixelColor(i,wheel((i+j) & 255))
+        self.strip.show()
+        sleep(wait_ms/1000.0)
+
   def showAllSegments(self):
     self.setSegmentColor(0, self.bottomRight, Color(255,0,0))
     self.setSegmentColor(self.bottomRight, self.topRight, Color(255,0,0))
@@ -65,7 +87,7 @@ class LEDStrip(object):
     self.setSegmentColor(self.topLeft, self.bottomLeft, Color(255,0,0))      
     self.strip.show()
   
-  def showXYPosition(self,x, y, color=Color(100,0,100)):
+  def showXYPosition(self,x, y, color=Color(255,0,255)):
     bottomX = self.calculatePixel(x, 0, self.bottomRight)
     topX = self.calculatePixel(1-x, self.topRight, self.topLeft)
     rightY = self.calculatePixel(1-y, self.bottomRight, self.topRight)
