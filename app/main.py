@@ -31,7 +31,8 @@ ledStrip = LEDStrip(ledCount, ledPin, ledBottomLeft, ledBottomRight, ledTopLeft,
 
 def screensaver():
   #ledStrip.theaterChase(color=Color(90,50,20), wait_ms=100)
-  ledStrip.rainbow(100)
+  #ledStrip.rainbow(100)
+  ledStrip.smoothStrip()
 
 def removeHand(): #define what happens if hand is removed
     #ledStrip.setStripColor(show=True) #Turn off LEDs
@@ -43,9 +44,8 @@ def removeHand(): #define what happens if hand is removed
     audio.sendReset()
     print("hand removed")
 
-if __name__ == '__main__':
 
-  # Process arguments
+if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
   args = parser.parse_args()
@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
   #ledStrip.setStripColor(Color(90,60,20), True)
   removeHand()
-  offTimer = NoEventTimer(12)
+  offTimer = NoEventTimer(3)
 
   try:
     for event in frameEvents.read_loop():

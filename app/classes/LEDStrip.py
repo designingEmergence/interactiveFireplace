@@ -12,6 +12,24 @@ def wheel(pos):
     pos -= 170
     return Color(0, pos * 3, 255 - pos * 3)
 
+def colorToRGB(color):
+  return color >> 16, color >> 8 & 255, color & 255
+
+def averageRGBColors(colors):
+  red = 0
+  green = 0
+  blue = 0
+  for color in colors:
+    red += color[0]
+    blue += color[1]
+    green += color[2]
+  
+  red = int(red/len(colors))
+  green = int(green/len(colors))
+  blue = int(blue/len(colors))
+  
+  return Color(red, blue, green)
+
 class LEDStrip(object):
   def __init__(self, ledCount, ledPin, bL, bR, tL, tR, maxBrightness=255, defaultColor=Color(255,255,255)):
     self.ledCount = ledCount
@@ -76,9 +94,33 @@ class LEDStrip(object):
         if self.animate == False:
           break
         for i in range(self.strip.numPixels()):
-          self.strip.setPixelColor(i,wheel((i+j) & 255))
+          color = wheel(int(i*256/self.strip.numPixels()+j) & 255)
+          self.strip.setPixelColor(i,color)
         self.strip.show()
         sleep(wait_ms/1000.0)
+  
+  def smooth(self, ledA, ledB, ledC):
+      colorA = colorToRGB(self.strip.getPixelColor(ledA))
+      colorB = colorToRGB(self.strip.getPixelColor(ledB))
+      colorC = colorToRGB(self.strip.getPixelColor(ledC))
+      return averageRGBColors([colorA, colorB, colorC])
+  
+  
+  def smoothStrip(self, wait_ms=10):
+    print('smooth strip')
+    while self.animate:
+      for i in range(self.strip.numPixels()):
+        if i == 0:
+          c = self.smooth(self.strip.numPixels()-1,i, i+1)
+        elif i == self.strip.numPixels()-1:
+          c = self.smooth(i-1,i,0)
+        else:
+          c = self.smooth(i-1,i,i+1)
+        
+        self.strip.setPixelColor(i,c)
+
+      self.strip.show()
+      sleep(wait_ms/1000.0)
 
   def showAllSegments(self):
     self.setSegmentColor(0, self.bottomRight, Color(255,0,0))
