@@ -75,6 +75,12 @@ class LEDStrip(object):
         self.strip.setPixelColor(i, color)
         self.strip.show()
         sleep(wait_ms/1000.0)
+
+  def showRainbow(self,offset=0):
+    for i in range(self.strip.numPixels()):
+      color = wheel(int(i*256/self.strip.numPixels()+offset) & 255)
+      self.strip.setPixelColor(i,color)
+    self.strip.show()
   
   def theaterChase(self, color=Color(90,50,20), wait_ms=50):
     print('theater chase')
@@ -87,16 +93,13 @@ class LEDStrip(object):
         for i in range(0, self.strip.numPixels(), 3):
           self.strip.setPixelColor(i+q, 0)
 
-  def rainbow(self, wait_ms=30):
+  def animatingRainbow(self, wait_ms=30):
     print('rainbow')
     while self.animate:
       for j in range(256):
         if self.animate == False:
           break
-        for i in range(self.strip.numPixels()):
-          color = wheel(int(i*256/self.strip.numPixels()+j) & 255)
-          self.strip.setPixelColor(i,color)
-        self.strip.show()
+        self.showRainbow(j)
         sleep(wait_ms/1000.0)
   
   def smooth(self, ledA, ledB, ledC):
