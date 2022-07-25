@@ -126,15 +126,15 @@ class LEDStrip(object):
       sleep(wait_ms/1000.0)
 
   def showAllSegments(self):
-    self.setSegmentColor(0, self.bottomRight, Color(255,0,0))
-    self.setSegmentColor(self.bottomRight, self.topRight, Color(255,0,0))
-    self.setSegmentColor(self.topRight, self.topLeft, Color(255,0,0))
-    self.setSegmentColor(self.topLeft, self.bottomLeft, Color(255,0,0))      
+    self.setSegmentColor(0, self.bottomLeft, Color(255,0,0))
+    self.setSegmentColor(self.bottomLeft, self.topLeft, Color(0,255,0))
+    self.setSegmentColor(self.topLeft, self.topRight, Color(0,0,255))
+    self.setSegmentColor(self.topRight, self.bottomRight, Color(255,255,255))      
     self.strip.show()
   
   def showXYPosition(self,x, y, color=Color(255,0,255)):
-    bottomX = self.calculatePixel(x, 0, self.bottomRight)
-    topX = self.calculatePixel(1-x, self.topRight, self.topLeft)
+    bottomX = self.calculatePixel(1-x, 0, self.bottomLeft)
+    topX = self.calculatePixel(x, self.topLeft, self.topRight)
     rightY = self.calculatePixel(1-y, self.bottomRight, self.topRight)
     leftY = self.calculatePixel(y, self.topLeft, self.bottomLeft)
     self.strip.setPixelColor(bottomX, color)
@@ -143,17 +143,21 @@ class LEDStrip(object):
     self.strip.setPixelColor(leftY, color)
   
   def showEdgeProximity(self, x, y, distanceThreshold):
+
+    #distance threshold from 0 to 1. The higher the threshold the closer you have to be to that edge
     bL = max(0,(1-x)-distanceThreshold)
     bR = max(0,x-distanceThreshold)
     bB = max(0,y-distanceThreshold)
     bT = max(0,(1-y)-distanceThreshold)
+    print(bL)
 
-    colorLeft = Color(int(bL*100),int(bL*100),int(bL*100))
-    colorRight = Color(int(bR*100),int(bR*100),int(bR*100))
-    colorBottom = Color(int(bB*100),int(bB*100),int(bB*100))
-    colorTop = Color(int(bT*100),int(bT*100),int(bT*100))
 
-    self.setSegmentColor(self.topLeft, self.bottomLeft, colorLeft)
-    self.setSegmentColor(self.bottomRight, self.topRight, colorRight)
-    self.setSegmentColor(0, self.bottomRight, colorBottom)
-    self.setSegmentColor(self.topRight, self.topLeft, colorTop)
+    colorLeft = Color(int(bL*100),int(bL*100),int(bL*40))
+    colorRight = Color(int(bR*100),int(bR*100),int(bR*40))
+    colorBottom = Color(int(bB*100),int(bB*100),int(bB*40))
+    colorTop = Color(int(bT*100),int(bT*100),int(bT*40))
+
+    self.setSegmentColor(self.bottomLeft, self.topLeft, colorLeft)
+    self.setSegmentColor(self.topRight, self.bottomRight, colorRight)
+    self.setSegmentColor(0, self.bottomLeft, colorBottom) 
+    self.setSegmentColor(self.topLeft, self.topRight, colorTop)

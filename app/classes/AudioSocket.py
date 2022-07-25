@@ -27,11 +27,16 @@ class AudioSocket(object):
   
   def resetSocketBlocker(self):
     self.socketBlock = False
+
+  def loadSoundFont(self, file):
+    self.audioSocket.send(("load " + file + "\n").encode())
+    print('loading file '+ file)
   
   def sendNote(self, val, note, vol):
     if self.socketBlock == False:
       self.audioSocket.send(("noteon " + str(val) + " " + str(note) + " " + str(vol)  + " \n").encode())
       self.socketBlock = True
+      print('sending note')
     
   def sendReset(self):
     if self.socketBlock == False:
