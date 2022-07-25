@@ -17,22 +17,23 @@ frameRange = {
 }
 
 #LED strip settings
-ledCount = 308
+ledCount = 315
 ledPin = 18
-ledBottomLeft = 308
-ledBottomRight = 78
-ledTopRight = 153
-ledTopLeft = 228
+ledBottomLeft = 79
+ledBottomRight = 315
+ledTopLeft = 158
+ledTopRight = 238
 
 frame = IRFrame(IRFramePath, frameRange)
 audio = AudioSocket(9800)
-ledStrip = LEDStrip(ledCount, ledPin, ledBottomLeft, ledBottomRight, ledTopLeft, ledTopRight,maxBrightness=20)
+ledStrip = LEDStrip(ledCount, ledPin, ledBottomLeft, ledBottomRight, ledTopLeft, ledTopRight,maxBrightness=200)
 
 
 def screensaver():
   #ledStrip.theaterChase(color=Color(90,50,20), wait_ms=100)
-  ledStrip.animatingRainbow(100)
+  #ledStrip.animatingRainbow(100)
   #ledStrip.smoothStrip()
+  ledStrip.showAllSegments()
 
 def removeHand(): #define what happens if hand is removed
     #ledStrip.setStripColor(show=True) #Turn off LEDs
@@ -53,10 +54,10 @@ if __name__ == '__main__':
   frameEvents = frame.start()
   audio.start()
 
-  #ledStrip.setStripColor(Color(90,60,20), True)
+  #ledStrip.setStripColor(Color(0,0,0), True)
   removeHand()
   offTimer = NoEventTimer(3)
-  ledStrip.showRainbow()
+  ledStrip.showAllSegments()
 
   try:
     for event in frameEvents.read_loop():
@@ -75,9 +76,10 @@ if __name__ == '__main__':
       
       elif event.code == 0:
         ledStrip.setStripColor(show=False)
-        ledStrip.showXYPosition(frame.xPercent, frame.yPercent)
+        #ledStrip.showXYPosition(frame.xPercent, frame.yPercent)
+        ledStrip.showEdgeProximity(frame.xPercent, frame.yPercent, 0.7)
         ledStrip.show()
-        audio.sendNote(2,note,vol)
+        audio.sendNote(2,note,100)
         offTimer.start(removeHand)        
   
   except KeyboardInterrupt:
